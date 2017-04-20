@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- accountType -  unique name to identify our account type
+                    used whenever some app wants to authenticate with us
+icon/smallicon -    are icons for the account to be seen on the device
+                    settings screen
+        label -     string that represent our account when listed on settings screen
+accountPreferences- is a reference to a Preferences XML. This will be shown when accessing
+                    the account's preferneces from thedevice Settings screen,
+                    allowing the user more control over the account -->
+<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+                       android:accountType="com.uberv.auth_example"
+                       android:icon="@mipmap/ic_uberv"
+                       android:smallIcon="@mipmap/ic_uberv"
+                       android:label="UberV Services"
+                       android:accountPreferences="@xml/prefs"/>
