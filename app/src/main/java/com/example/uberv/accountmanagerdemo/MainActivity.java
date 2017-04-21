@@ -1,7 +1,11 @@
 package com.example.uberv.accountmanagerdemo;
 
-import android.support.v7.app.AppCompatActivity;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,9 +35,61 @@ public class MainActivity extends AppCompatActivity {
         You can read more about authenticating using OAuth2 here.
      */
 
+    private ListView mAccountsListView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAccountsListView = (ListView) findViewById(R.id.accounts_list);
+
+        AccountManager accountManager = AccountManager.get(this);
+        Account[] accounts = accountManager.getAccountsByType("com.uberv.auth_example");
+
+        ArrayAdapter<String> accountNamesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        String[] accountNames = new String[accounts.length];
+        for (int i = 0; i < accounts.length; i++) {
+            accountNames[i] = accounts[i].name;
+        }
+        mAccountsListView.setAdapter(accountNamesAdapter);
+        accountNamesAdapter.addAll(accountNames);
+
+
+//        Bundle options = new Bundle();
+//        Account account = accounts[1];
+//        accountManager.getAuthToken(
+//                account,
+//                "my-very-custom-auth-token-type",
+//                options,
+//                this,
+//                new AccountManagerCallback<Bundle>() {
+//                    @Override
+//                    public void run(AccountManagerFuture<Bundle> future) {
+//                        try {
+//                            Bundle info = future.getResult();
+//                            int c = 5;
+//                        } catch (OperationCanceledException e) {
+//                            e.printStackTrace();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        } catch (AuthenticatorException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                },
+//                new Handler(new Handler.Callback() {
+//                    @Override
+//                    public boolean handleMessage(Message msg) {
+//                        return false;
+//                    }
+//                })
+//        );
+
+//        accountManager.addAccountExplicitly(acc, "root", null);
+        // prompt the user to create a new account
+        // use account type as definedin xml/authenticator.xml
+//        accountManager.addAccount("com.uberv.auth_example", "some auth token type", null, null, this, null, null);
     }
 }

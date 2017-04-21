@@ -14,4 +14,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="account_label">UberV</string>
+    <string name="ke1">key1</string>
+    <string name="key1_title">key1 title</string>
+    <string name="key1_summary">key1 summary</string>
+    <string name="pref_sync_summ">sync summary</string>
+    <string name="pref_sync">sync title</string>
 </resources>

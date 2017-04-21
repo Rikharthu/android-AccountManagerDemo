@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
-import static android.provider.ContactsContract.Directory.ACCOUNT_TYPE;
 
 /**
  * This activity will show the user a log-in form, authenticate him with our server,
@@ -122,11 +121,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         new AsyncTask<Void, Void, Intent>() {
             @Override
             protected Intent doInBackground(Void... params) {
+                // TODO try and hangle the log-in process
+                // TODO handle differently depending on the passed ARG_AUTH_TYPE
 //                String authtoken = sServerAuthenticate.userSignIn(userName, userPass, mAuthTokenType);
                 String authtoken = "stub_token_from_activity";
+                // prepare the bundle to be returned to our authenticator
+                // with a valid KEY_AUTHTOKEN authentication token
                 final Intent res = new Intent();
                 res.putExtra(AccountManager.KEY_ACCOUNT_NAME, userName);
-                res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
+                res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, getIntent().getStringExtra(ARG_ACCOUNT_TYPE));
                 res.putExtra(AccountManager.KEY_AUTHTOKEN, authtoken);
                 res.putExtra(PARAM_USER_PASS, userPass);
                 return res;
@@ -153,16 +156,20 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             String authtokenType = "my-very-custom-auth-token-type";
             // Creating the account on the device and setting the auth token we got
-            // (Not setting the auth token will cause another call to the server to authenticate the user)
+            // will also remember the password
             mAccountManager.addAccountExplicitly(account, accountPassword, null);
+            // (Not setting the auth token will cause another call to the server to authenticate the user,
+            // From diagram:
+            // authenticator.getAuthToken() -> get auth token from KEY_AUTHTOKEN -> use auth token
+            // to access service ->authenticator.getAuthToken() -> launch authenticator intent)
             mAccountManager.setAuthToken(account, authtokenType, authtoken);
         } else {
-            // remember the password for further calls
+            // remember the password for further calls (no-login sign-in)
             Log.d(LOG_TAG, "setting password for existing account: " + account.name);
-
             mAccountManager.setPassword(account, accountPassword);
         }
         Log.d(LOG_TAG, "finishLogin(), setAccountAuthenticatorResult");
+
         // return the information back to the authenticator
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);

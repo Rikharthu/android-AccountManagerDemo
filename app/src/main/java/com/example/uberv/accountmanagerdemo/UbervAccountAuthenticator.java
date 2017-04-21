@@ -67,7 +67,7 @@ public class UbervAccountAuthenticator extends AbstractAccountAuthenticator {
         if (TextUtils.isEmpty(authToken)) {
             final String password = am.getPassword(account);
             if (password != null) {
-                // perform a new server request for an auth token
+                // perform a new server request for an auth token with known password
 //                authToken = sServerAuthenticate.userSignIn(account.name, password, authTokenType);
                 authToken = "stub_token";
             }
